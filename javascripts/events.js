@@ -16,7 +16,7 @@ const pressEnter = () => {
 		if (e.key === 'Enter') {
 			e.preventDefault();
 			let cityZip = getInput();
-			owmdb.searchWeather(cityZip);
+			owmdb.searchWeather(cityZip,1);
 		}
 	});
 };
@@ -24,7 +24,22 @@ const pressEnter = () => {
 $('#button-search').on('click', function(e) {
 	e.preventDefault();
 	let cityZip = getInput();
-	owmdb.searchWeather(cityZip);
+	owmdb.searchWeather(cityZip,1);
 });
 
-module.exports = pressEnter;
+
+// add event listeners to dynamically created buttons
+$(document).on('click', '#3-days', function(e) { 
+	e.preventDefault();
+	let cityZip = getInput();
+	owmdb.searchWeather(cityZip,3);
+});
+
+$(document).on('click', '#5-days', function(e) { 
+	e.preventDefault();
+	let cityZip = getInput();
+	owmdb.searchWeather(cityZip,7);
+});
+
+
+module.exports = {pressEnter};

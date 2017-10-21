@@ -1,48 +1,74 @@
 "use strict";
 
+let events = require('./events');
+
+let moment = require('../lib/node_modules/moment/moment.js');
+
 const clearDom = () => {
 	$("#weather-holder").empty("");
-	$("#search-field").val("");
 };
 
-const domString = (currentWeatherData) => {
+const domString = (currentWeatherData, days) => {
 	let domStrang = "";
 
-		console.log(Object.keys(currentWeatherData));
-		console.log(currentWeatherData.main.temp);
-
-		domStrang += `<div class="current col-sm-12 col-md-12">`;
-		domStrang += 	`<p>Temperature: ${currentWeatherData.main.temp}</p>`;
-		domStrang += 	`<p>Current Conditions: ${currentWeatherData.weather.description}</p>`;
-		domStrang += 	`<p>Wind direciton: ${currentWeatherData.wind.deg}, Wind speed: ${currentWeatherData.wind.speed}</p>`;
+	switch(days) {
+    case 1:
+		let daTe = moment(currentWeatherData.dt*1000).format("dddd, DD MMM YYYY hh:mm a");
+	    domStrang += `<div id="forcast-current" class="current col-sm-12 col-md-12 text-center">`;
+		domStrang += 	`<p><span class="bold-text">Date:</span> ${daTe}</p>`;
+		domStrang += 	`<p><span class="bold-text">Temperature:</span> ${currentWeatherData.main.temp}</p>`;
+		domStrang += 	`<p><span class="bold-text">Current Conditions:</span> ${currentWeatherData.weather[0].description}</p>`;
+		domStrang += 	`<p><span class="bold-text">Wind direciton:</span> ${currentWeatherData.wind.deg}, Wind speed: ${currentWeatherData.wind.speed}</p>`;
+		domStrang +=	`<p><a id="3-days" href="#" class="btn btn-primary" role="button">3-Day Forcast</a> <a id="5-days" href="#" class="btn btn-default" role="button">7-Day Forcast</a></p>`;
 		domStrang += `</div>`;
+        break;
+    case 3:
+		let weatherArray = currentWeatherData.list;
+		for (let i = 8; i < 32; i=i+8) { 
+	        domStrang += `<div id="forcast-3days" class="forcast col-sm-3 col-md-3">`;
+			let daTe = moment(weatherArray[i].dt*1000).format("dddd, DD MMM YYYY hh:mm a");
+			domStrang += 	`<p><span class="bold-text">Date:</span> ${daTe}</p>`;
+			domStrang += 	`<p><span class="bold-text">Temperature:</span> ${weatherArray[i].main.temp}</p>`;
+			domStrang += 	`<p><span class="bold-text">Current Conditions:</span> ${weatherArray[i].weather[0].description}</p>`;
+			domStrang += 	`<p><span class="bold-text">Wind direciton:</span> ${weatherArray[i].description}, Wind speed: ${weatherArray[i].wind.speed}</p>`;
+			domStrang += `</div>`;
+		}
+        break;
+    case 7:
+    	let weatherArray5 = currentWeatherData.list;
+		for (let i = 0; i < 40; i=i+8) {
+			let daTe = moment(weatherArray5[i].dt*1000).format("dddd, DD MMM YYYY hh:mm a");
+	        domStrang += `<div id="forcast-5days" class="forcast col-sm-3 col-md-3">`;
+			domStrang += 	`<p><span class="bold-text">Date:</span> ${daTe}</p>`; 
+			domStrang += 	`<p><span class="bold-text">Temperature:</span> ${weatherArray5[i].main.temp}</p>`;
+			domStrang += 	`<p><span class="bold-text">Current Conditions:</span> ${weatherArray5[i].weather[0].description}</p>`;
+			domStrang += 	`<p><span class="bold-text">Wind direciton:</span> ${weatherArray5[i].wind.deg}, Wind speed: ${weatherArray5[i].wind.speed}</p>`;
+			domStrang += `</div>`;
+		}
+        break;
 
-		// for (let i = 0; i < movieArray.length; i++) {
-		// if (i % 3 === 0) {
-		// 	domStrang += `<div class="row">`;
-		// }
-		// domStrang +=  `<div class="col-sm-6 col-md-4">`;
-		// domStrang +=    `<div class="thumbnail">`;
-		// domStrang +=     `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}" alt="">`;
-		// domStrang +=      `<div class="caption">`;
-		// domStrang +=        `<h3>${movieArray[i].original_title}</h3>`;
-		// domStrang += 		`<p>${movieArray[i].overview}</p>`;
-		// domStrang +=        `<p><a href="#" class="btn btn-primary" role="button">Review</a> <a href="#" class="btn btn-default" role="button">Watch List</a></p>`;
-		// domStrang +=      `</div>`;
-		// domStrang +=    `</div>`;
-		// domStrang +=  `</div>`;
-		// if (i % 3 === 2 || i === movieArray.length -1 ) {
-		// 	domStrang += `</div>`;
-		// }
-
-	// }
-	printToDom(domStrang);
+    default:
+        break;
+    }
+	printToDom(domStrang, days);
 };
 
+const printToDom = (strang, days) => { 
+	if (days === 1) {
+		if ($('#forcast-current')) {
+			$('#forcast-current').remove();
+		}
+		if ($('.forcast')) {
+			$('.forcast').remove();
+		}
+		$("main").append(strang);
 
-const printToDom = (strang) => {
-	$("#weather-holder").append(strang);
-
+	} else {
+		if ($('.forcast')) {
+			$('.forcast').remove();
+		}
+		$("main").append(strang);
+	}
 };
 
 module.exports = {clearDom, domString};
