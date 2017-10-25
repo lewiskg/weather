@@ -19,7 +19,7 @@ const domString = (currentWeatherData, days) => {
 		domStrang += 	`<p><span class="bold-text">Temperature:</span> ${currentWeatherData.main.temp}</p>`;
 		domStrang += 	`<p><span class="bold-text">Current Conditions:</span> ${currentWeatherData.weather[0].description}</p>`;
 		domStrang += 	`<p><span class="bold-text">Wind direciton:</span> ${currentWeatherData.wind.deg}, Wind speed: ${currentWeatherData.wind.speed}</p>`;
-		domStrang +=	`<p><a id="3-days" href="#" class="btn btn-primary" role="button">3-Day Forcast</a> <a id="5-days" href="#" class="btn btn-default" role="button">7-Day Forcast</a></p>`;
+		domStrang +=	`<p><a id="3-days" href="#" class="btn btn-primary" role="button">3-Day Forcast</a> <a id="5-days" href="#" class="btn btn-default" role="button">5-Day Forcast</a></p>`;
 		domStrang += `</div>`;
         break;
     case 3:
